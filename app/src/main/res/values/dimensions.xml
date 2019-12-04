@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="arrowsize">80dp</dimen>
+    <dimen name="margArrowsBottom">100dp</dimen>
+    <dimen name="margArrowsSide">30dp</dimen>
+    <dimen name="lifeSize">30dp</dimen>
+    <dimen name="margLifeTop">30dp</dimen>
+    <dimen name="margLifeside">30dp</dimen>
+    <dimen name="margLifeNext">30dp</dimen>
+
+</resources>

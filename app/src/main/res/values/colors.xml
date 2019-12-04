@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="menuBTNtext">#FFFFFF</color>
+    <color name="menuBTN">#6FF151</color>
+    <color name="menuBG">#6928DB</color>
+    <color name="menuTXT">#FFFFFF</color>
+    <color name="gameBG">#A2A294</color>
+</resources>
