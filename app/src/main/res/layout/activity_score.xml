@@ -1,9 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ScoreActivity">
+    tools:context=".ScoreActivity"
+    android:background="@color/menu_background"
+    android:id="@+id/score_LY">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/score_TXT_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/score_BTN_menu"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/score_TXT_margin_bottom_parent"
+        android:textSize="@dimen/score_TXT_score_text_size"
+        android:text="score: "/>
+
+    <FrameLayout
+        android:id="@+id/score_FRM_chart"
+        android:layout_marginTop="@dimen/score_FRM_margin_top"
+        android:layout_width="@dimen/score_FRM_size"
+        android:layout_height="@dimen/score_FRM_size"
+        android:layout_centerHorizontal="true" />
+
+    <FrameLayout
+        android:id="@+id/score_FRM_askname"
+        android:layout_marginTop="@dimen/score_FRM_margin_top"
+        android:layout_width="@dimen/score_FRM_size"
+        android:layout_height="@dimen/score_FRM_size"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/score_BTN_scores"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/score_BTN_menu"
+        android:backgroundTint="@color/menu_BTN"
+        android:text="SCORES"/>
+
+    <Button
+        android:id="@+id/score_BTN_playAgain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:backgroundTint="@color/menu_BTN"
+        android:text="PLAY AGAIN"/>
+
+    <Button
+        android:id="@+id/score_BTN_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/score_BTN_playAgain"
+        android:layout_centerHorizontal="true"
+        android:backgroundTint="@color/menu_BTN"
+        android:text="MENU"/>
+
+</RelativeLayout>

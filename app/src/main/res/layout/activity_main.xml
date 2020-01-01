@@ -10,7 +10,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/menuBG">
+        android:background="@color/menu_background">
 
         <TextView
             android:id="@+id/main_LBL_menu"
@@ -18,10 +18,10 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="50dp"
-            android:text="Main Menu"
-            android:textColor="@color/menuTXT"
-            android:textSize="20sp"
+            android:layout_marginTop="100dp"
+            android:text="if you lose you hate monkeys"
+            android:textColor="@color/menu_TXT"
+            android:textSize="@dimen/menu_TXT_head_text_size"
             android:textStyle="bold" />
 
         <Switch
@@ -29,43 +29,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/main_LBL_menu"
-            android:layout_marginTop="50dp"
-            android:layout_toStartOf="@id/main_LBL_menu" />
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/menu_sensor_margin_top" />
 
         <TextView
             android:id="@+id/main_LBL_sensor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/main_LBL_menu"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="50dp"
             android:layout_toEndOf="@+id/main_SW_sensor"
+            android:layout_marginTop="@dimen/menu_sensor_margin_top"
             android:text="sensor"
-            android:textColor="@color/menuTXT" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/main_LBL_menu"
-            android:layout_marginHorizontal="100dp"
-            android:layout_marginTop="60dp"
-            android:orientation="vertical">
-
-
-
-        </LinearLayout>
-
+            android:textColor="@color/menu_TXT" />
 
         <Button
             android:id="@+id/main_BTN_play"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:backgroundTint="@color/menuBTN"
-            android:padding="20dp"
-            android:text="PLAY"
-            android:textColor="@color/menuBTNtext"
-            android:textSize="30sp" />
+            android:backgroundTint="@color/menu_BTN_play"
+            android:padding="@dimen/menu_BTN_play_padding"
+            android:textColor="@color/menu_BTN_text"
+            android:textSize="@dimen/menu_BTN_play_text_size"
+            android:text="PLAY"/>
+
     </RelativeLayout>
 
 

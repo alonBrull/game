@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/menu_background">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/askname_TXT_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/ask_LBL_margin_top"
+            android:text="whats your name?"
+            android:textSize="@dimen/ask_LBL_text_size" />
+
+        <EditText
+            android:id="@+id/askname_EDT_name"
+            android:layout_width="@dimen/ask_EDT_width"
+            android:layout_height="@dimen/ask_EDT_hight"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:hint="name:" />
+
+        <Button
+            android:id="@+id/askname_BTN_enter"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/ask_BTN_hight"
+            android:layout_below="@+id/askname_EDT_name"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/ask_BTN_margin_top_parent"
+            android:background="@color/menu_BTN"
+            android:text="ENTER"
+            android:textColor="@color/menu_TXT"
+            android:textSize="@dimen/ask_BTN_enter_text_size" />
+
+        <Button
+            android:id="@+id/askname_BTN_check"
+            android:layout_width="@dimen/ask_BTN_hight"
+            android:layout_height="@dimen/ask_BTN_hight"
+            android:layout_below="@+id/askname_EDT_name"
+            android:layout_marginTop="@dimen/ask_BTN_margin_top_parent"
+            android:layout_toRightOf="@id/askname_BTN_enter"
+            android:background="@drawable/ic_checkbox" />
+
+    </RelativeLayout>
+
+
+</FrameLayout>

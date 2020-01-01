@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ScoreActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/menu_background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/framchart_BTN_p0"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/menu_BTN"
+            android:text=""
+            android:textColor="@color/chart_place_TXT"
+            android:layout_weight="1"/>
+        <Button
+            android:id="@+id/framchart_BTN_p1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text=""
+            android:textColor="@color/chart_place_TXT"
+            android:layout_weight="1"/>
+        <Button
+            android:id="@+id/framchart_BTN_p2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text=""
+            android:textColor="@color/chart_place_TXT"
+            android:layout_weight="1"/>
+        <Button
+            android:id="@+id/framchart_BTN_p3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text=""
+            android:textColor="@color/chart_place_TXT"
+            android:layout_weight="1"/>
+        <Button
+            android:id="@+id/framchart_BTN_p4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text=""
+            android:textColor="@color/chart_place_TXT"
+            android:layout_weight="1"/>
+        <Button
+            android:id="@+id/framchart_BTN_p5"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text=""
+            android:textColor="@color/chart_place_TXT"
+            android:layout_weight="1"/>
+        <Button
+            android:id="@+id/framchart_BTN_p6"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text=""
+            android:textColor="@color/chart_place_TXT"
+            android:layout_weight="1"/>
+        <Button
+            android:id="@+id/framchart_BTN_p7"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text=""
+            android:textColor="@color/chart_place_TXT"
+            android:layout_weight="1"/>
+        <Button
+            android:id="@+id/framchart_BTN_p8"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text=""
+            android:textColor="@color/chart_place_TXT"
+            android:layout_weight="1"/>
+        <Button
+            android:id="@+id/framchart_BTN_p9"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text=""
+            android:textColor="@color/chart_place_TXT"
+            android:layout_weight="1"/>
+
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>

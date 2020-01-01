@@ -1,11 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="arrowsize">80dp</dimen>
-    <dimen name="margArrowsBottom">100dp</dimen>
-    <dimen name="margArrowsSide">30dp</dimen>
-    <dimen name="lifeSize">30dp</dimen>
-    <dimen name="margLifeTop">30dp</dimen>
-    <dimen name="margLifeside">30dp</dimen>
-    <dimen name="margLifeNext">30dp</dimen>
-
+    // menu
+    <dimen name="menu_TXT_head_text_size">20sp</dimen>
+    <dimen name="menu_sensor_margin_top">60dp</dimen>
+    <dimen name="menu_BTN_play_padding">20dp</dimen>
+    <dimen name="menu_BTN_play_text_size">30sp</dimen>
+    // game
+    <dimen name="game_BTN_arrow_size">70dp</dimen>
+    <dimen name="game_BTN_arrow_margin_bottom">280dp</dimen>
+    <dimen name="game_BTN_arrow_margin_side">60dp</dimen>
+    <dimen name="game_IMG_life_size">30dp</dimen>
+    <dimen name="game_IMG_life_margin_top">100dp</dimen>
+    <dimen name="game_IMG_life_margin_side">10dp</dimen>
+    <dimen name="game_IMG_life_margin_between">30dp</dimen>
+    <dimen name="game_TXT_score_size">20sp</dimen>
+    <dimen name="game_TXT_score_margin_top">30dp</dimen>
+    <dimen name="game_TXT_score_margin_end">19dp</dimen>
+    <dimen name="game_LY_coin_padding">30dp</dimen>
+    <dimen name="game_LY_padding_horizontal">30dp</dimen>
+    // score
+    <dimen name="score_TXT_score_text_size">10sp</dimen>
+    <dimen name="score_TXT_margin_bottom_parent">165dp</dimen>
+    <dimen name="score_FRM_size">200dp</dimen>
+    <dimen name="score_FRM_margin_top">20dp</dimen>
+    // chart
+    <dimen name="chart_place_size">30sp</dimen>
+    // ask name
+    <dimen name="ask_LBL_margin_top">10dp</dimen>
+    <dimen name="ask_LBL_text_size">15sp</dimen>
+    <dimen name="ask_EDT_width">200dp</dimen>
+    <dimen name="ask_EDT_hight">100dp</dimen>
+    <dimen name="ask_BTN_margin_top_parent">10dp</dimen>
+    <dimen name="ask_BTN_enter_text_size">15sp</dimen>
+    <dimen name="ask_BTN_hight">50dp</dimen>
 </resources>

@@ -3,9 +3,18 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
-    <color name="menuBTNtext">#FFFFFF</color>
-    <color name="menuBTN">#6FF151</color>
-    <color name="menuBG">#6928DB</color>
-    <color name="menuTXT">#FFFFFF</color>
-    <color name="gameBG">#A2A294</color>
+
+    // menu
+    <color name="menu_BTN_text">#FFFFFF</color>
+    <color name="menu_BTN">#FF5722</color>
+    <color name="menu_BTN_play">#FF5722</color>
+    <color name="menu_background">#FCAC93</color>
+    <color name="menu_TXT">#FFFFFF</color>
+
+    // game
+    <color name="game_background">#A2A294</color>
+    <color name="game_TXT_score">#FFFFFF</color>
+
+    // chart
+    <color name="chart_place_TXT">#000000</color>
 </resources>

@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="rows">7</integer>
-    <integer name="columns">3</integer>
+    <integer name="columns">5</integer>
     <integer name="life">3</integer>
+    <integer name="maxSpeed">150</integer>
+    <integer name="startSpeed">300</integer>
+    <integer name="countToSpeedup">10</integer>
+    <integer name="countToNextSpeedup">10</integer>
+    <fraction name="speedup">0.9</fraction>
 </resources>
