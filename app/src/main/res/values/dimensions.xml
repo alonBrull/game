@@ -2,7 +2,8 @@
 <resources>
     // menu
     <dimen name="menu_TXT_head_text_size">20sp</dimen>
-    <dimen name="menu_sensor_margin_top">60dp</dimen>
+    <dimen name="menu_settings_margin_top">60dp</dimen>
+    <dimen name="menu_radio_margin_sensor">20dp</dimen>
     <dimen name="menu_BTN_play_padding">20dp</dimen>
     <dimen name="menu_BTN_play_text_size">30sp</dimen>
     // game
@@ -29,7 +30,7 @@
     <dimen name="ask_LBL_margin_top">10dp</dimen>
     <dimen name="ask_LBL_text_size">15sp</dimen>
     <dimen name="ask_EDT_width">200dp</dimen>
-    <dimen name="ask_EDT_hight">100dp</dimen>
+    <dimen name="ask_EDT_hight">50dp</dimen>
     <dimen name="ask_BTN_margin_top_parent">10dp</dimen>
     <dimen name="ask_BTN_enter_text_size">15sp</dimen>
     <dimen name="ask_BTN_hight">50dp</dimen>

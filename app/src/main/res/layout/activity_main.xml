@@ -24,23 +24,52 @@
             android:textSize="@dimen/menu_TXT_head_text_size"
             android:textStyle="bold" />
 
-        <Switch
-            android:id="@+id/main_SW_sensor"
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/main_LBL_menu"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/menu_sensor_margin_top" />
+            android:layout_below="@+id/main_LBL_menu"
+            android:layout_marginTop="@dimen/menu_settings_margin_top">
 
-        <TextView
-            android:id="@+id/main_LBL_sensor"
+            <Switch
+                android:id="@+id/main_SW_sensor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/main_LBL_sensor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/main_SW_sensor"
+                android:text="sensor mode"
+                android:textColor="@color/menu_TXT" />
+
+            <RadioGroup
+                android:id="@+id/main_RBG_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/main_LBL_menu"
-            android:layout_toEndOf="@+id/main_SW_sensor"
-            android:layout_marginTop="@dimen/menu_sensor_margin_top"
-            android:text="sensor"
-            android:textColor="@color/menu_TXT" />
+            android:layout_below="@id/main_SW_sensor"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/menu_radio_margin_sensor"
+            android:checkedButton="@id/main_RB_fast">
+
+                <RadioButton
+                android:id="@+id/main_RB_slow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="easy"
+                android:textColor="@color/menu_BTN_text" />
+
+                <RadioButton
+                android:id="@+id/main_RB_fast"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SUPER HARD"
+                android:textColor="@color/menu_BTN_text" />
+            </RadioGroup>
+
+
+        </RelativeLayout>
 
         <Button
             android:id="@+id/main_BTN_play"
@@ -49,9 +78,9 @@
             android:layout_centerInParent="true"
             android:backgroundTint="@color/menu_BTN_play"
             android:padding="@dimen/menu_BTN_play_padding"
+            android:text="PLAY"
             android:textColor="@color/menu_BTN_text"
-            android:textSize="@dimen/menu_BTN_play_text_size"
-            android:text="PLAY"/>
+            android:textSize="@dimen/menu_BTN_play_text_size" />
 
     </RelativeLayout>
 

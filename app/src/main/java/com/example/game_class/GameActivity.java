@@ -58,10 +58,18 @@ public class GameActivity extends AppCompatActivity {
     private Button arrow_BTN_right, arrow_BTN_left;
     private int speed, maxSpeed, count, nextCount;
 
-    private int bonusValue = 1000;
+    private int bonusValue = R.integer.bonusValue;
     private int bonusCount = 0;
 
+    private boolean isSensor;
+
     private MyLogic logic;
+
+    private MySensor mySensor;
+
+//    private MediaPlayer mediaPlayerBackGround;
+//    private MediaPlayer mediaPlayerEffect;
+//    private int length;
 
     MySharedPreferences msp;
 
@@ -78,8 +86,18 @@ public class GameActivity extends AppCompatActivity {
         rows = getResources().getInteger(R.integer.rows);
         cols = getResources().getInteger(R.integer.columns);
 
-        speed = getResources().getInteger(R.integer.startSpeed);
-        maxSpeed = getResources().getInteger(R.integer.maxSpeed);
+//        mediaPlayerBackGround = MediaPlayer.create(this, R.raw.game_track);
+//        mediaPlayerBackGround.setLooping(true);
+//        mediaPlayerBackGround.start();
+
+        Bundle extras = getIntent().getExtras();
+        if (extras.getBoolean("isSlow")) {
+            speed = getResources().getInteger(R.integer.slowStartSpeed);
+            maxSpeed = getResources().getInteger(R.integer.slowMaxSpeed);
+        } else {
+            speed = getResources().getInteger(R.integer.startSpeed);
+            maxSpeed = getResources().getInteger(R.integer.maxSpeed);
+        }
         count = getResources().getInteger(R.integer.countToSpeedup);
         nextCount = getResources().getInteger(R.integer.countToNextSpeedup);
 
@@ -156,27 +174,40 @@ public class GameActivity extends AppCompatActivity {
 
         arrow_BTN_left = findViewById(R.id.game_BTN_leftarrow);
 
-        arrow_BTN_right.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                moveRight();
-            }
-        });
+        isSensor = extras.getBoolean("sensor");
 
-        arrow_BTN_left.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                moveLeft();
-            }
-        });
+        if (isSensor)
+            sensorMode();
+        else {
+            arrow_BTN_right.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    moveRight();
+                }
+            });
 
+            arrow_BTN_left.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    moveLeft();
+                }
+            });
+        }
 
         loopFunc();
 
         loopScore();
     }
 
-    private void loopScore(){
+    private void sensorMode() {
+        arrow_BTN_right.setVisibility(View.INVISIBLE);
+        arrow_BTN_left.setVisibility(View.INVISIBLE);
+
+        mySensor = new MySensor(this);
+        mySensor.setGameActivity(this);
+    }
+
+    private void loopScore() {
         if (!isFinishing()) {
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
@@ -207,7 +238,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     // speed acceleration
-    private void manageSpeed(){
+    private void manageSpeed() {
         count--;
         if (count == 0 && speed > maxSpeed) {
             nextCount *= 5; // next speedup will take after a longer count
@@ -221,16 +252,14 @@ public class GameActivity extends AppCompatActivity {
         int tempScore = scoreCount;
         int digitsize = 1;
         String s = "";
-        while(tempScore != 0)
-        {
-            digitsize*=10;
-            tempScore/=10;
+        while (tempScore != 0) {
+            digitsize *= 10;
+            tempScore /= 10;
         }
-        digitsize/=10;
-        while(digitsize != 0)
-        {
-            s = s + (scoreCount/(digitsize))%10 + "\n";
-            digitsize/=10;
+        digitsize /= 10;
+        while (digitsize != 0) {
+            s = s + (scoreCount / (digitsize)) % 10 + "\n";
+            digitsize /= 10;
         }
         game_TXT_score.setText(s);
     }
@@ -248,10 +277,9 @@ public class GameActivity extends AppCompatActivity {
             for (int j = 0; j < cols; j++) {
                 if (logic.getMatrix()[i][j] == 1) {
                     dropImgMatrix[i][j].setVisibility(View.VISIBLE);
-                } else if(logic.getMatrix()[i][j] == 2) {
+                } else if (logic.getMatrix()[i][j] == 2) {
                     coinImgMatrix[i][j].setVisibility(View.VISIBLE);
-                }
-                else{
+                } else {
                     dropImgMatrix[i][j].setVisibility(View.INVISIBLE);
                     coinImgMatrix[i][j].setVisibility(View.INVISIBLE);
                 }
@@ -259,7 +287,7 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
-    private void moveRight() {
+    public void moveRight() {
         logic.right();
         for (int i = 0; i < cols; i++) {
             if (logic.getArr()[i]) {
@@ -270,7 +298,7 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
-    private void moveLeft() {
+    public void moveLeft() {
         logic.left();
         for (int i = 0; i < cols; i++) {
             if (logic.getArr()[i]) {
@@ -282,7 +310,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     // check if collected bonus, if collected --> bonusCount++ , scoreCount += value
-    private void manageBonus(){
+    private void manageBonus() {
         int index = logic.checkBonus();
         if (index != -1) {
             bonusCollectingEffect(index);
@@ -292,6 +320,8 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void bonusCollectingEffect(int index) {
+//        mediaPlayerEffect = MediaPlayer.create(this, R.raw.score_track);
+//        mediaPlayerEffect.start();
     }
 
     // check if hit, if hit --> loose life, if life == 0 --> score activity
@@ -310,7 +340,7 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
-    private void hitVibrate(){
+    private void hitVibrate() {
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             v.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE));
@@ -347,6 +377,9 @@ public class GameActivity extends AppCompatActivity {
 
     // animation if drop hits avatar
     private void manageHitExplosionEffect(int index) {
+//        mediaPlayerEffect = MediaPlayer.create(this, R.raw.damage_sound);
+//        mediaPlayerEffect.start();
+
         final ImageView img3 = findViewById(hit1Id[index]);
         img3.setVisibility(View.VISIBLE);
         final ImageView img4 = findViewById(hit2Id[index]);
@@ -367,14 +400,54 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void gotoScoreActivity() {
+//        mediaPlayerBackGround.release();
+//        mediaPlayerBackGround = null;
+//        mediaPlayerEffect.release();
+//        mediaPlayerEffect = null;
+
         Score score = new Score(scoreCount, 0);
         Gson gson = new Gson();
         String jsn = gson.toJson(score);
-        msp.putString("score" ,jsn);
-
-        this.finish();
+        msp.putString("score", jsn);
 
         Intent intent = new Intent(GameActivity.this, ScoreActivity.class);
+        intent.putExtra("sensor", isSensor);
+
         startActivity(intent);
+
+        this.finish();
+    }
+
+    @Override
+    protected void onResume() {
+//        mediaPlayerBackGround.start();
+//        mediaPlayerBackGround.seekTo(length);
+        super.onResume();
+    }
+
+    @Override
+    protected void onStart() {
+
+//        mediaPlayerBackGround = MediaPlayer.create(this, R.raw.game_track);
+//        mediaPlayerBackGround.setLooping(true);
+//        mediaPlayerBackGround.start();
+
+        super.onStart();
+
+    }
+
+    @Override
+    protected void onStop() {
+//        mediaPlayerBackGround.release();
+//        mediaPlayerBackGround = null;
+        super.onStop();
+    }
+
+    @Override
+    protected void onPause() {
+//        mediaPlayerBackGround.pause();
+//        length = mediaPlayerBackGround.getCurrentPosition();
+
+        super.onPause();
     }
 }

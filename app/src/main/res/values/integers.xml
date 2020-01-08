@@ -2,10 +2,16 @@
 <resources>
     <integer name="rows">7</integer>
     <integer name="columns">5</integer>
+
     <integer name="life">3</integer>
     <integer name="maxSpeed">150</integer>
+    <integer name="slowMaxSpeed">200</integer>
     <integer name="startSpeed">300</integer>
+    <integer name="slowStartSpeed">400</integer>
+
     <integer name="countToSpeedup">10</integer>
     <integer name="countToNextSpeedup">10</integer>
     <fraction name="speedup">0.9</fraction>
+
+    <integer name="bonusValue">500</integer>
 </resources>

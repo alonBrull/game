@@ -8,6 +8,10 @@
     android:background="@color/menu_background"
     android:id="@+id/score_LY">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
     <TextView
         android:id="@+id/score_TXT_score"
         android:layout_width="wrap_content"
@@ -18,19 +22,8 @@
         android:textSize="@dimen/score_TXT_score_text_size"
         android:text="score: "/>
 
-    <FrameLayout
-        android:id="@+id/score_FRM_chart"
-        android:layout_marginTop="@dimen/score_FRM_margin_top"
-        android:layout_width="@dimen/score_FRM_size"
-        android:layout_height="@dimen/score_FRM_size"
-        android:layout_centerHorizontal="true" />
 
-    <FrameLayout
-        android:id="@+id/score_FRM_askname"
-        android:layout_marginTop="@dimen/score_FRM_margin_top"
-        android:layout_width="@dimen/score_FRM_size"
-        android:layout_height="@dimen/score_FRM_size"
-        android:layout_centerHorizontal="true" />
+
 
     <Button
         android:id="@+id/score_BTN_scores"
@@ -40,6 +33,7 @@
         android:layout_above="@+id/score_BTN_menu"
         android:backgroundTint="@color/menu_BTN"
         android:text="SCORES"/>
+
 
     <Button
         android:id="@+id/score_BTN_playAgain"
@@ -57,5 +51,31 @@
         android:layout_centerHorizontal="true"
         android:backgroundTint="@color/menu_BTN"
         android:text="MENU"/>
+
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/score_FRM_askname"
+        android:layout_marginTop="@dimen/score_FRM_margin_top"
+        android:layout_width="@dimen/score_FRM_size"
+        android:layout_height="270dp"
+        android:layout_centerHorizontal="true"/>
+
+    <FrameLayout
+        android:id="@+id/score_FRM_chart"
+        android:layout_marginTop="@dimen/score_FRM_margin_top"
+        android:layout_width="@dimen/score_FRM_size"
+        android:layout_height="@dimen/score_FRM_size"
+        android:layout_centerHorizontal="true"/>
+
+
+    <FrameLayout
+        android:id="@+id/score_FRM_map"
+        android:layout_marginBottom="@dimen/score_FRM_margin_top"
+        android:layout_width="@dimen/score_FRM_size"
+        android:layout_height="@dimen/score_FRM_size"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"/>
+
 
 </RelativeLayout>
