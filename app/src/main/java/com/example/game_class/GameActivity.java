@@ -2,6 +2,7 @@ package com.example.game_class;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -58,18 +59,23 @@ public class GameActivity extends AppCompatActivity {
     private Button arrow_BTN_right, arrow_BTN_left;
     private int speed, maxSpeed, count, nextCount;
 
-    private int bonusValue = R.integer.bonusValue;
+    private int bonusValue;
     private int bonusCount = 0;
 
-    private boolean isSensor;
+    private boolean sensor;
+    private boolean slow;
+
+    private boolean pauseGame;
 
     private MyLogic logic;
+    private boolean bArr[];
+
 
     private MySensor mySensor;
 
-//    private MediaPlayer mediaPlayerBackGround;
-//    private MediaPlayer mediaPlayerEffect;
-//    private int length;
+    private MediaPlayer mediaPlayerBackGround;
+    private MediaPlayer mediaPlayerEffect;
+    private int length = 0;
 
     MySharedPreferences msp;
 
@@ -83,132 +89,205 @@ public class GameActivity extends AppCompatActivity {
 
         msp = new MySharedPreferences(this);
 
+        initValuesFromResource();
+        initViews();
+        findViews();
+        setViewsInitialVisibility();
+
+        logic = new MyLogic(rows, cols);
+
+        slow = getIntent().getExtras().getBoolean("slow");
+        setSpeed(slow);
+
+        sensor = getIntent().getExtras().getBoolean("sensor");
+        setMode(sensor);
+    }
+
+    private void initValuesFromResource() {
         rows = getResources().getInteger(R.integer.rows);
         cols = getResources().getInteger(R.integer.columns);
+        life = getResources().getInteger(R.integer.life);
+        bonusValue = getResources().getInteger(R.integer.bonusValue);
+        count = getResources().getInteger(R.integer.countToSpeedup);
+        nextCount = getResources().getInteger(R.integer.countToNextSpeedup);
+    }
 
-//        mediaPlayerBackGround = MediaPlayer.create(this, R.raw.game_track);
-//        mediaPlayerBackGround.setLooping(true);
-//        mediaPlayerBackGround.start();
+    private void findViews() {
+        // drop images
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                dropImgMatrix[i][j] = findViewById(dropId[i * cols + j]);
+            }
+        }
+        // bonus images
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                coinImgMatrix[i][j] = findViewById(coinId[i * cols + j]);
+            }
+        }
+        // avatar images
+        for (int i = 0; i < cols; i++) {
+            avatarImgArr[i] = findViewById(avatarId[i]);
+        }
+        // life images
+        for (int i = 0; i < life; i++) {
+            lifeImgArr[i] = findViewById(lifeId[i]);
+        }
+        // bottom hit images
+        for (int i = 0; i < cols; i++) {
+            drophit1ImgArr[i] = findViewById(drophit1Id[i]);
+            drophit2ImgArr[i] = findViewById(drophit2Id[i]);
+        }
+        // avatar hit images
+        for (int i = 0; i < cols; i++) {
+            hit1ImgArr[i] = findViewById(hit1Id[i]);
+            hit2ImgArr[i] = findViewById(hit2Id[i]);
+        }
+        // score text
+        game_TXT_score = findViewById(R.id.game_TXT_score);
+        // arrow buttons
+        arrow_BTN_right = findViewById(R.id.game_BTN_rightarrow);
+        arrow_BTN_left = findViewById(R.id.game_BTN_leftarrow);
+    }
 
-        Bundle extras = getIntent().getExtras();
-        if (extras.getBoolean("isSlow")) {
+    private void initViews() {
+        // drop images
+        dropImgMatrix = new ImageView[rows][cols];
+        // bonus images
+        coinImgMatrix = new ImageView[rows][cols];
+        // avatar images
+        avatarImgArr = new ImageView[cols];
+        // life images
+        lifeImgArr = new ImageView[life];
+        // bottom hit images
+        drophit1ImgArr = new ImageView[cols];
+        drophit2ImgArr = new ImageView[cols];
+        // avatar hit images
+        hit1ImgArr = new ImageView[cols];
+        hit2ImgArr = new ImageView[cols];
+    }
+
+    private void setViewsInitialVisibility() {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                dropImgMatrix[i][j].setVisibility(View.INVISIBLE);
+            }
+        }
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                coinImgMatrix[i][j].setVisibility(View.INVISIBLE);
+            }
+        }
+        for (int i = 0; i < cols; i++) {
+            avatarImgArr[i].setVisibility(View.INVISIBLE);
+        }
+        // set avatar position at middle
+        avatarImgArr[cols / 2].setVisibility(View.VISIBLE);
+
+        for (int i = 0; i < cols; i++) {
+            drophit1ImgArr[i].setVisibility(View.INVISIBLE);
+            drophit2ImgArr[i].setVisibility(View.INVISIBLE);
+        }
+
+        for (int i = 0; i < cols; i++) {
+            hit1ImgArr[i].setVisibility(View.INVISIBLE);
+            hit2ImgArr[i].setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void setSpeed(Boolean isSlow) {
+        if (isSlow) {
             speed = getResources().getInteger(R.integer.slowStartSpeed);
             maxSpeed = getResources().getInteger(R.integer.slowMaxSpeed);
         } else {
             speed = getResources().getInteger(R.integer.startSpeed);
             maxSpeed = getResources().getInteger(R.integer.maxSpeed);
         }
-        count = getResources().getInteger(R.integer.countToSpeedup);
-        nextCount = getResources().getInteger(R.integer.countToNextSpeedup);
+    }
 
-        // init logic
-        logic = new MyLogic(rows, cols);
-
-        // init and connect "drop" image views
-        dropImgMatrix = new ImageView[rows][cols];
-
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                dropImgMatrix[i][j] = findViewById(dropId[i * cols + j]);
-                dropImgMatrix[i][j].setVisibility(View.INVISIBLE);
-            }
-        }
-
-        // init and connect "coin" image views
-        coinImgMatrix = new ImageView[rows][cols];
-
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                coinImgMatrix[i][j] = findViewById(coinId[i * cols + j]);
-                coinImgMatrix[i][j].setVisibility(View.INVISIBLE);
-            }
-        }
-
-        // init and connect "avatar" image viewes
-        avatarImgArr = new ImageView[cols];
-
-        for (int i = 0; i < cols; i++) {
-            avatarImgArr[i] = findViewById(avatarId[i]);
-            avatarImgArr[i].setVisibility(View.INVISIBLE);
-        }
-        // set avatar at middle at start of game
-        avatarImgArr[cols / 2].setVisibility(View.VISIBLE);
-
-        // init and connect "life" image views
-        life = getResources().getInteger(R.integer.life);
-
-        lifeImgArr = new ImageView[life];
-
-        for (int i = 0; i < life; i++) {
-            lifeImgArr[i] = findViewById(lifeId[i]);
-        }
-
-        // init and connect "bottom hit effect" image views
-        drophit1ImgArr = new ImageView[cols];
-        drophit2ImgArr = new ImageView[cols];
-
-        for (int i = 0; i < cols; i++) {
-            drophit1ImgArr[i] = findViewById(drophit1Id[i]);
-            drophit1ImgArr[i].setVisibility(View.INVISIBLE);
-            drophit2ImgArr[i] = findViewById(drophit2Id[i]);
-            drophit2ImgArr[i].setVisibility(View.INVISIBLE);
-        }
-
-
-        // init and connect "avatar hit effect" image views
-        hit1ImgArr = new ImageView[cols];
-        hit2ImgArr = new ImageView[cols];
-
-        for (int i = 0; i < cols; i++) {
-            hit1ImgArr[i] = findViewById(hit1Id[i]);
-            hit1ImgArr[i].setVisibility(View.INVISIBLE);
-            hit2ImgArr[i] = findViewById(hit2Id[i]);
-            hit2ImgArr[i].setVisibility(View.INVISIBLE);
-        }
-
-        // init and connect score
-        game_TXT_score = findViewById(R.id.game_TXT_score);
-
-        // connect arrow buttons
-        arrow_BTN_right = findViewById(R.id.game_BTN_rightarrow);
-
-        arrow_BTN_left = findViewById(R.id.game_BTN_leftarrow);
-
-        isSensor = extras.getBoolean("sensor");
-
+    private void setMode(Boolean isSensor) {
         if (isSensor)
             sensorMode();
         else {
-            arrow_BTN_right.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    moveRight();
-                }
-            });
-
-            arrow_BTN_left.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    moveLeft();
-                }
-            });
+            setArrowsOnClickListeners();
         }
+    }
 
-        loopFunc();
+    private void setArrowsOnClickListeners() {
+        arrow_BTN_right.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                moveRight();
+            }
+        });
 
-        loopScore();
+        arrow_BTN_left.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                moveLeft();
+            }
+        });
     }
 
     private void sensorMode() {
         arrow_BTN_right.setVisibility(View.INVISIBLE);
         arrow_BTN_left.setVisibility(View.INVISIBLE);
 
+        bArr = new boolean[cols];
         mySensor = new MySensor(this);
-        mySensor.setGameActivity(this);
+        mySensor.setCallBackSensor(callBack_sensor);
     }
 
+    final CallBack_Sensor callBack_sensor = new CallBack_Sensor() {
+        @Override
+        public void center() {
+            bArr[cols / 2] = true;
+            logic.setArr(bArr);
+            bArr[cols / 2] = false;
+        }
+
+        @Override
+        public void centerRight() {
+            bArr[cols / 2 + 1] = true;
+            logic.setArr(bArr);
+            bArr[cols / 2 + 1] = false;
+        }
+
+        @Override
+        public void centerLeft() {
+            bArr[cols / 2 - 1] = true;
+            logic.setArr(bArr);
+            bArr[cols / 2 - 1] = false;
+        }
+
+        @Override
+        public void right() {
+            bArr[cols - 1] = true;
+            logic.setArr(bArr);
+            bArr[cols - 1] = false;
+        }
+
+        @Override
+        public void left() {
+            bArr[0] = true;
+            logic.setArr(bArr);
+            bArr[0] = false;
+        }
+
+        @Override
+        public void move() {
+            for (int i = 0; i < cols; i++) {
+                if (logic.getArr()[i]) {
+                    avatarImgArr[i].setVisibility(View.VISIBLE);
+                } else {
+                    avatarImgArr[i].setVisibility(View.INVISIBLE);
+                }
+            }
+        }
+    };
+
     private void loopScore() {
-        if (!isFinishing()) {
+        if (!pauseGame) {
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
@@ -221,7 +300,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void loopFunc() {
-        if (!isFinishing()) {
+        if (!pauseGame) {
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
@@ -320,8 +399,9 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void bonusCollectingEffect(int index) {
-//        mediaPlayerEffect = MediaPlayer.create(this, R.raw.score_track);
-//        mediaPlayerEffect.start();
+        // TODO: 1/9/2020 animation
+        mediaPlayerEffect = MediaPlayer.create(this, R.raw.game_collectcoin);
+        mediaPlayerEffect.start();
     }
 
     // check if hit, if hit --> loose life, if life == 0 --> score activity
@@ -377,8 +457,9 @@ public class GameActivity extends AppCompatActivity {
 
     // animation if drop hits avatar
     private void manageHitExplosionEffect(int index) {
-//        mediaPlayerEffect = MediaPlayer.create(this, R.raw.damage_sound);
-//        mediaPlayerEffect.start();
+        mediaPlayerEffect = MediaPlayer.create(this, R.raw.game_explosionhit);
+        mediaPlayerEffect.start();
+        mediaPlayerEffect.seekTo(150);
 
         final ImageView img3 = findViewById(hit1Id[index]);
         img3.setVisibility(View.VISIBLE);
@@ -400,10 +481,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void gotoScoreActivity() {
-//        mediaPlayerBackGround.release();
-//        mediaPlayerBackGround = null;
-//        mediaPlayerEffect.release();
-//        mediaPlayerEffect = null;
+        pauseGame = true;
 
         Score score = new Score(scoreCount, 0);
         Gson gson = new Gson();
@@ -411,43 +489,45 @@ public class GameActivity extends AppCompatActivity {
         msp.putString("score", jsn);
 
         Intent intent = new Intent(GameActivity.this, ScoreActivity.class);
-        intent.putExtra("sensor", isSensor);
+        intent.putExtra("sensor", sensor);
+        intent.putExtra("slow", slow);
 
         startActivity(intent);
 
         this.finish();
     }
 
+    private void startBackGroundMusic() {
+        mediaPlayerBackGround = MediaPlayer.create(this, R.raw.game_track);
+        mediaPlayerBackGround.start();
+        mediaPlayerBackGround.seekTo(length);
+        mediaPlayerBackGround.setLooping(true);
+    }
+
+    private void releseBackGroundMusic() {
+        mediaPlayerBackGround.pause();
+        length = mediaPlayerBackGround.getCurrentPosition();
+        mediaPlayerBackGround.release();
+        mediaPlayerBackGround = null;
+    }
+
     @Override
     protected void onResume() {
-//        mediaPlayerBackGround.start();
-//        mediaPlayerBackGround.seekTo(length);
         super.onResume();
-    }
 
-    @Override
-    protected void onStart() {
+        pauseGame = false;
+        loopFunc();
+        loopScore();
 
-//        mediaPlayerBackGround = MediaPlayer.create(this, R.raw.game_track);
-//        mediaPlayerBackGround.setLooping(true);
-//        mediaPlayerBackGround.start();
-
-        super.onStart();
-
-    }
-
-    @Override
-    protected void onStop() {
-//        mediaPlayerBackGround.release();
-//        mediaPlayerBackGround = null;
-        super.onStop();
+        startBackGroundMusic();
     }
 
     @Override
     protected void onPause() {
-//        mediaPlayerBackGround.pause();
-//        length = mediaPlayerBackGround.getCurrentPosition();
-
         super.onPause();
+
+        pauseGame = true;
+
+        releseBackGroundMusic();
     }
 }

@@ -9,6 +9,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
@@ -17,7 +18,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,31 +42,31 @@ import java.util.List;
 
 public class ScoreActivity extends AppCompatActivity {
     private Button score_BTN_playAgain, score_BTN_menu, score_BTN_scores;
-    private Button score_BTN_here;
+
     private FragmentChart fram_chart;
     private FragmentAskName fram_askname;
     private FragmentMap fram_map;
-
-    private FrameLayout score_FRM_chart, score_FRM_askname, score_FRM_map;
 
     private TextView score_TXT_score;
     private Score score;
     private Score[] highScores;
     private String[] highScoresStrings;
 
+    private boolean sensor;
+    private boolean slow;
+
     private final int NUM_OF_SCORES = 10;
-    private boolean isSensor;
 
     MySharedPreferences msp;
     private Gson gson;
 
-//    private MediaPlayer mediaPlayerBackGround;
-//    private MediaPlayer mediaPlayerEffect;
+    private MediaPlayer mediaPlayerBackGround;
+    private MediaPlayer mediaPlayerEffect;
+    private int length;
 
     // map parameters
     int PERMISSION_ID = 44;
     FusedLocationProviderClient mFusedLocationClient;
-    private Button btn1, btn2, btn3;
     private double lat, lng;
 
     @Override
@@ -77,46 +77,40 @@ public class ScoreActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_score);
 
-//        mediaPlayerBackGround = MediaPlayer.create(this, R.raw.score_track);
-//        mediaPlayerBackGround.setLooping(true);
-//        mediaPlayerBackGround.start();
-
-        Bundle extras = getIntent().getExtras();
-        isSensor = extras.getBoolean("sensor");
-
         msp = new MySharedPreferences(this);
         gson = new Gson();
 
+        sensor = getIntent().getExtras().getBoolean("sensor");
+        slow = getIntent().getExtras().getBoolean("slow");
+
         findViews();
         setOnClickListeners();
+        initFragments();
 
         String sc = msp.getString("score", "NA");
-        score = gson.fromJson(sc, Score.class);
-
-        score_TXT_score.setText("SCORE\n" + "" + score.getScore());
-
-        highScores = new Score[NUM_OF_SCORES];
-        highScoresStrings = new String[NUM_OF_SCORES];
-
-        fram_askname = new FragmentAskName();
-        fram_askname.setCallBackList(myCallBack);
-        fram_askname.setCallBackLocation(callBack_location);
+        if(!(sc.equals("NA"))) {
+            score = gson.fromJson(sc, Score.class);
+            score_TXT_score.setText("SCORE\n" + "" + score.getScore());
+        }
 
         initScores();
         manageScores();
+
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        getLastLocation();
+    }
+
+    private void initFragments(){
+        fram_askname = new FragmentAskName();
+        fram_askname.setCallBackList(myCallBack);
+        fram_askname.setCallBackLocation(callBack_location);
 
         fram_chart = new FragmentChart();
         fram_chart.setCallBackList(myCallBack);
         fram_chart.setCallBackLocation(callBack_location);
 
-
-        // map
         fram_map = new FragmentMap();
         fram_map.setCallBack(callBack_location);
-
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-
-        getLastLocation();
     }
 
     private void setOnClickListeners() {
@@ -165,22 +159,15 @@ public class ScoreActivity extends AppCompatActivity {
 
     private void findViews() {
         score_TXT_score = findViewById(R.id.score_TXT_score);
-
-        score_FRM_chart = findViewById(R.id.score_FRM_chart);
-        score_FRM_askname = findViewById(R.id.score_FRM_askname);
-        score_FRM_map = findViewById(R.id.score_FRM_map);
-
         score_BTN_scores = findViewById(R.id.score_BTN_scores);
         score_BTN_playAgain = findViewById(R.id.score_BTN_playAgain);
         score_BTN_menu = findViewById(R.id.score_BTN_menu);
     }
 
     private void gotoGameActivity() {
-//        mediaPlayerBackGround.release();
-//        mediaPlayerBackGround = null;
-
         Intent intent = new Intent(ScoreActivity.this, GameActivity.class);
-        intent.putExtra("sensor", isSensor);
+        intent.putExtra("sensor", sensor);
+        intent.putExtra("slow", slow);
 
         startActivity(intent);
 
@@ -188,13 +175,13 @@ public class ScoreActivity extends AppCompatActivity {
     }
 
     private void gotoMainActivity() {
-//        mediaPlayerBackGround.release();
-//        mediaPlayerBackGround = null;
         this.finish();
     }
 
     private void initScores() {
+        highScoresStrings = new String[NUM_OF_SCORES];
         setScoresStrings();
+        highScores = new Score[NUM_OF_SCORES];
         for (int i = 0; i < 10; i++) {
             if (highScoresStrings[i].equals("NOTFOUND"))
                 highScores[i] = null;
@@ -418,14 +405,6 @@ public class ScoreActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (checkPermissions()) {
-            getLastLocation();
-        }
-    }
-
     public LatLng getLocationFromAddress(String strAddress) {
 
         Geocoder coder = new Geocoder(this);
@@ -454,5 +433,33 @@ public class ScoreActivity extends AppCompatActivity {
             e.printStackTrace();
             return new LatLng(0, 0);
         }
+    }
+
+    private void startBackGroundMusic() {
+        mediaPlayerBackGround = MediaPlayer.create(this, R.raw.score_track);
+        mediaPlayerBackGround.start();
+        mediaPlayerBackGround.seekTo(length);
+        mediaPlayerBackGround.setLooping(true);
+    }
+
+    private void releseBackGroundMusic() {
+        mediaPlayerBackGround.pause();
+        length = mediaPlayerBackGround.getCurrentPosition();
+        mediaPlayerBackGround.release();
+        mediaPlayerBackGround = null;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        startBackGroundMusic();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        releseBackGroundMusic();
     }
 }

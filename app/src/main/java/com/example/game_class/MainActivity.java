@@ -1,6 +1,7 @@
 package com.example.game_class;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -16,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
     private Button main_BTN_play;
     private Switch main_SW_sensor;
     private RadioGroup main_RBG_group;
-//    private MediaPlayer mediaPlayerBackGround;
+    private MediaPlayer mediaPlayerBackGround;
     private int length;
 
     @Override
@@ -25,14 +26,12 @@ public class MainActivity extends AppCompatActivity {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
-//        mediaPlayerBackGround = new MediaPlayer();
-//        mediaPlayerBackGround = MediaPlayer.create(this, R.raw.main_track);
-//        mediaPlayerBackGround.start();
-        //mediaPlayerBackGround.setLooping(true);
 
         findViews();
+        setOnclickListeners();
+    }
 
-
+    private void setOnclickListeners() {
         main_BTN_play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,8 +47,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void gotoGameActivity() {
-//        mediaPlayerBackGround.release();
-//        mediaPlayerBackGround = null;
         Intent intent = new Intent(MainActivity.this, GameActivity.class);
 
         boolean checked = main_SW_sensor.isChecked();
@@ -57,44 +54,38 @@ public class MainActivity extends AppCompatActivity {
 
         int radioButtonId = main_RBG_group.getCheckedRadioButtonId();
         if (radioButtonId == R.id.main_RB_slow)
-            intent.putExtra("isSlow", true);
+            intent.putExtra("slow", true);
         else
-            intent.putExtra("isSlow", false);
+            intent.putExtra("slow", false);
 
         startActivity(intent);
     }
 
+    private void startBackGroundMusic() {
+        mediaPlayerBackGround = MediaPlayer.create(this, R.raw.main_track);
+        mediaPlayerBackGround.start();
+        mediaPlayerBackGround.seekTo(length);
+        mediaPlayerBackGround.setLooping(true);
+    }
+
+    private void releseBackGroundMusic() {
+        mediaPlayerBackGround.pause();
+        length = mediaPlayerBackGround.getCurrentPosition();
+        mediaPlayerBackGround.release();
+        mediaPlayerBackGround = null;
+    }
+
     @Override
     protected void onResume() {
-//        mediaPlayerBackGround.start();
-//        mediaPlayerBackGround.seekTo(length);
         super.onResume();
-    }
 
-    @Override
-    protected void onStart() {
-        findViews();
-
-//        mediaPlayerBackGround = MediaPlayer.create(this, R.raw.main_track);
-//        //mediaPlayerBackGround.setLooping(true);
-//        mediaPlayerBackGround.start();
-
-        super.onStart();
-
-    }
-
-    @Override
-    protected void onStop() {
-//        mediaPlayerBackGround.release();
-//        mediaPlayerBackGround = null;
-        super.onStop();
+        startBackGroundMusic();
     }
 
     @Override
     protected void onPause() {
-//        mediaPlayerBackGround.pause();
-//        length = mediaPlayerBackGround.getCurrentPosition();
-
         super.onPause();
+
+        releseBackGroundMusic();
     }
 }

@@ -71,18 +71,6 @@ public class MyLogic {
         }
     }
 
-    public void nextLineBonus() {
-        if (newLine()) {
-            Random r = new Random();
-            matrix[0][r.nextInt(cols)] = 2;
-        } else {
-            for (int i = 0; i < cols - 1; i++) {
-                matrix[0][i] = 0;
-            }
-        }
-    }
-
-
     public void step() {
         for (int i = rows - 1; i > 0; i--) {
             for (int j = cols - 1; j >= 0; j--) {
@@ -105,11 +93,6 @@ public class MyLogic {
         return true;
     }
 
-
-    public boolean[] getArr() {
-        return arr;
-    }
-
     public void right() {
         for (int i = cols - 2; i >= 0; i--) {
             if (arr[i]) {
@@ -126,6 +109,15 @@ public class MyLogic {
                 arr[i - 1] = true;
             }
         }
+    }
+
+    public void setArr(boolean[] arr) {
+        for(int i = 0; i < cols; i ++)
+            this.arr[i] = arr[i];
+    }
+
+    public boolean[] getArr() {
+        return arr;
     }
 
 }

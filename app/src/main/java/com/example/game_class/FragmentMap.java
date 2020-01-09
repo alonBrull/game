@@ -70,12 +70,12 @@ public class FragmentMap extends Fragment {
     public void moveCamera(LatLng latLng){
         CameraPosition googlePlex = CameraPosition.builder()
                 .target(latLng)
-                .zoom(5)
+                .zoom(7)
                 .bearing(0)
                 .tilt(45)
                 .build();
 
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(googlePlex), 5000, null);
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(googlePlex), 2000, null);
     }
 
     public void addMarker(LatLng latLng, String title, String name){

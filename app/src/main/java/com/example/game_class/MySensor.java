@@ -8,13 +8,12 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
 public class MySensor implements SensorEventListener {
-    private GameActivity gameActivity;
+    private CallBack_Sensor callBack_sensor;
     private SensorManager sensorManager;
     float ax,ay,az;   // these are the acceleration in x,y and z axis
-    long time, lastUpdate;
-
-    public void setGameActivity(GameActivity gameActivity) {
-        this.gameActivity = gameActivity;
+    private int i;
+    public void setCallBackSensor(CallBack_Sensor callBack_sensor){
+        this.callBack_sensor = callBack_sensor;
     }
 
     public MySensor(Context context)
@@ -34,22 +33,35 @@ public class MySensor implements SensorEventListener {
             ay=event.values[1];
             az=event.values[2];
 
+            if(i != 0 && ax > -2.5 && ax < 2.5) {
+                i = 0;
+                callBack_sensor.center();
+                callBack_sensor.move();
+            }
 
-            long actualTime = event.timestamp; //get the event's timestamp
-            if(actualTime - lastUpdate > 110000000) {
-                right();
-                left();
-                lastUpdate = actualTime;
+            else if(i != 1 && ax > 3 && ax < 4.5) {
+                i = 1;
+                callBack_sensor.centerLeft();
+                callBack_sensor.move();
+            }
+
+            else if(i != 2 && ax < -3 && ax > -4.5) {
+                i = 2;
+                callBack_sensor.centerRight();
+                callBack_sensor.move();
+            }
+
+            else if(i != 3 && ax > 5) {
+                i = 3;
+                callBack_sensor.left();
+                callBack_sensor.move();
+            }
+
+            else if(i != 4 && ax < - 5) {
+                i = 4;
+                callBack_sensor.right();
+                callBack_sensor.move();
             }
         }
-    }
-
-    public void right(){
-        if(ax < -2.5 && ay < 9.5)
-            gameActivity.moveRight();
-    }
-    public void left(){
-        if(ax > 2.5 && ay < 9.5)
-            gameActivity.moveLeft();
     }
 }
